@@ -1,0 +1,16 @@
+{% extends 'base.html'%}
+
+{% block main %}
+
+    <div class="row">
+            <div class="col">
+                <h2>Tem certeza que deseja excluir? {{ obj }}</h2>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Deletar</button>
+                </form>
+        </div>
+    </div>
+
+{% endblock %}

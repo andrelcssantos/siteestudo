@@ -1,0 +1,78 @@
+{% extends 'base.html'%}
+{% load bootstrap %}
+
+{% block menu %}
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'core_home' %}">Home</a>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Serviços</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="{% url 'core_lista_pessoas' %}">Pessoas</a>
+      <a class="dropdown-item" href="{% url 'core_lista_veiculos' %}">Veículos</a>
+      <a class="dropdown-item" href="{% url 'core_lista_movrotativos' %}">Mov Rotativos</a>
+      <a class="dropdown-item" href="{% url 'core_lista_mensalista' %}">Mensalistas</a>
+      <a class="dropdown-item active" href="{% url 'core_lista_movmensalistas' %}">Mov Mensalistas</a>
+    </div>
+  </li>
+
+    {% if user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link disabled" href="">Olá, {{ user }}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+        </li>
+        {% else %}
+             <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+             </li>
+    {% endif %}
+</ul>
+{% endblock %}
+
+{% block main %}
+
+    <div class="row">
+        <div class="col-12">
+            <h1>Cadastro</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <form action="{% url 'core_movmensalistas_novo' %}" method="POST">
+                {% csrf_token %}
+                {{ form|bootstrap }}
+
+                <button class="btn btn-primary" type="submit">Cadastrar</button>
+            </form>
+        </div>
+
+         <div class="col-sm-6">
+            <table class="table table-sm table-hover">
+                <h1>Lista Movimento Mensalistas</h1>
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">Mensalista</th>
+                      <th scope="col">Data Pagto</th>
+                      <th scope="col">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for m in mov_mensalistas %}
+                    <tr>
+                        <th scope="row"><a href="{% url 'core_movmensalista_update' m.id %}">{{ m.id }}</a></th>
+                      <td>{{ m.mensalista }}</td>
+                      <td>{{ m.dt_pgto }}</td>
+                      <td>{{ m.total }}</td>
+                    </tr>
+                    {% endfor %}
+              </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
